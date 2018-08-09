@@ -1,0 +1,34 @@
+{
+	"Disabled": [
+		false,
+		"bool"
+	],
+	"UsersDn": [
+		"ou=Users,dc=afterlogic,dc=com",
+		"string"
+	],
+	"Host": [
+		"127.0.0.1",
+		"string"
+	],
+	"Port": [
+		389,
+		"int"
+	],
+	"BindDn": [
+		"cn=Administrator,dc=afterlogic,dc=com",
+		"string"
+	],
+	"BindPassword": [
+		"secret",
+		"string"
+	],
+	"LoginField": [
+		"mail",
+		"string"
+	],
+	"EmailField": [
+		"mail",
+		"string"
+	]
+}
