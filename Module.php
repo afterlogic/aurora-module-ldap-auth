@@ -31,7 +31,6 @@ class Module extends \Aurora\System\Module\AbstractModule
 		$this->oApiMailManager = $oMailModule->oApiMailManager;
 
 		$this->subscribeEvent('Login', array($this, 'onLogin'), 10);
-//		$this->subscribeEvent('CheckAccountExists', array($this, 'onCheckAccountExists'));
 	}
 	
 	/**
@@ -84,28 +83,47 @@ class Module extends \Aurora\System\Module\AbstractModule
 					(string) $this->getConfig('BindDn', ''),
 					(string) $this->getConfig('BindPassword', '')
 				);
-				if ($oLdap && $oLdap->Search('('. $sLoginField .'='.$sLogin.')') && 1 === $oLdap->ResultCount())
+				if ($oLdap)
 				{
-					$aData = $oLdap->ResultItem();
-					$sDn = !empty($aData['dn']) ? $aData['dn'] : '';
-					if (!empty($sDn) && $oLdap->ReBind($sDn, $sPassword))
+					if ($oLdap->Search('('. $sLoginField .'='.$sLogin.')') && 1 === $oLdap->ResultCount())
 					{
-						if (isset($aData[$sEmailField]))
+						$aData = $oLdap->ResultItem();
+						$sDn = !empty($aData['dn']) ? $aData['dn'] : '';
+						if (!empty($sDn) && $oLdap->ReBind($sDn, $sPassword))
 						{
-							if (isset($aData[$sEmailField]['count']))
+							if (isset($aData[$sEmailField]))
 							{
-								$sEmail = !empty($aData[$sEmailField][0]) ? $aData[$sEmailField][0] : '';
+								if (isset($aData[$sEmailField]['count']))
+								{
+									$sEmail = !empty($aData[$sEmailField][0]) ? $aData[$sEmailField][0] : '';
+								}
+								else
+								{
+									$sEmail = $aData[$sEmailField];
+								}
 							}
-							else
-							{
-								$sEmail = $aData[$sEmailField];
-							}
+							$mResult = true;
 						}
-						$mResult = true;
+						else
+						{
+							\Aurora\System\Api::Log('Bad credentials fo user: ' . $sLogin, \Aurora\System\Enums\LogLevel::Full, 'ldap-');
+						}
 					}
+					else
+					{
+						\Aurora\System\Api::Log('Can`t find user ' . $sLogin . ' on LDAP-server', \Aurora\System\Enums\LogLevel::Full, 'ldap-');
+					}
+				}
+				else
+				{
+					\Aurora\System\Api::Log('Can`t connect to LDAP-server', \Aurora\System\Enums\LogLevel::Full, 'ldap-');
 				}
 			}			
 		}		
+		else
+		{
+			\Aurora\System\Api::Log('ldap_connect not found', \Aurora\System\Enums\LogLevel::Full, 'ldap-');
+		}
 		
 		return $mResult;
 	}
