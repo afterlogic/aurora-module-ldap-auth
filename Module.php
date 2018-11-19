@@ -18,13 +18,15 @@ namespace Aurora\Modules\LdapAuth;
  */
 class Module extends \Aurora\System\Module\AbstractModule
 {
+	protected $aRequireModules = ['Mail'];
+
 	/***** private functions *****/
 	/**
 	 * @return array
 	 */
 	public function init()
 	{
-		$oMailModule = \Aurora\System\Api::getModule('Mail');
+		$oMailModule = \Aurora\System\Api::GetModule('Mail');
 
 		$this->oApiAccountsManager = $oMailModule->oApiAccountsManager;
 		$this->oApiServersManager = $oMailModule->oApiServersManager;
@@ -156,7 +158,7 @@ class Module extends \Aurora\System\Module\AbstractModule
 			}
 			if ($oServer)
 			{
-				$oAccount = \Aurora\System\EAV\Entity::createInstance(\Aurora\System\Api::GetModule('Mail')->getNamespace() . '\Classes\Account', $this->GetName());
+				$oAccount = new \Aurora\Modules\Mail\Classes\Account(self::GetName());
 				$oAccount->Email = $sLogin;
 				$oAccount->IncomingLogin = $sLogin;
 				$oAccount->IncomingPassword = $sPassword;
