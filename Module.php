@@ -32,7 +32,7 @@ class Module extends \Aurora\System\Module\AbstractModule
 		$this->oApiServersManager = $oMailModule->oApiServersManager;
 		$this->oApiMailManager = $oMailModule->oApiMailManager;
 
-		$this->subscribeEvent('Login', array($this, 'onLogin'), 10);
+		$this->subscribeEvent('Login', array($this, 'onLogin'), 120);
 	}
 	
 	/**
