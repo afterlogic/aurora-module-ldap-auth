@@ -59,7 +59,7 @@ class Module extends \Aurora\System\Module\AbstractModule
 	public function onCheckAccountExists($aArgs)
 	{
 		$oSettings =&\Aurora\System\Api::GetSettings();
-		if ($aArgs['Login'] === $oSettings->GetConf('AdminLogin'))
+		if ($aArgs['Login'] === $oSettings->AdminLogin)
 		{
 			throw new \Aurora\System\Exceptions\ApiException(\Aurora\System\Notifications::AccountExists);
 		}
