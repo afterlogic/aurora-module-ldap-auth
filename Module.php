@@ -227,13 +227,7 @@ class Module extends \Aurora\System\Module\AbstractModule
 
 				if ($bResult)
 				{
-					$mResult = array(
-						'token' => 'auth',
-						'sign-me' => $aArgs['SignMe'],
-						'id' => $oAccount->IdUser,
-						'account' => $oAccount->EntityId,
-						'account_type' => $oAccount->getName()
-					);
+					$mResult = \Aurora\System\UserSession::getTokenData($oAccount, $aArgs['SignMe']);
 				}
 			}
 			catch (\Aurora\System\Exceptions\ApiException $oException)
