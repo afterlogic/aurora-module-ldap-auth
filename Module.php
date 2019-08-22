@@ -138,7 +138,7 @@ class Module extends \Aurora\System\Module\AbstractModule
 		$sPassword = $aArgs['Password'];
 		$iUserId = 0;
 		
-		$oAccount = \Aurora\System\Api::GetModule('Mail')->getAccountsManager()->getAccountUsedToAuthorize($sLogin);
+		$oAccount = \Aurora\Modules\Mail\Module::getInstance()->getAccountsManager()->getAccountUsedToAuthorize($sLogin);
 
 		$bNewAccount = false;
 		$bAutocreateMailAccountOnNewUserFirstLogin = \Aurora\Modules\Mail\Module::Decorator()->getConfig('AutocreateMailAccountOnNewUserFirstLogin', false);
@@ -147,10 +147,10 @@ class Module extends \Aurora\System\Module\AbstractModule
 		{
 			$sEmail = $sLogin;
 			$sDomain = \MailSo\Base\Utils::GetDomainFromEmail($sEmail);
-			$oServer = \Aurora\System\Api::GetModule('Mail')->getServersManager()->GetServerByDomain(strtolower($sDomain));
+			$oServer = \Aurora\Modules\Mail\Module::getInstance()->getServersManager()->GetServerByDomain(strtolower($sDomain));
 			if (!$oServer)
 			{
-				$oServer = \Aurora\System\Api::GetModule('Mail')->getServersManager()->GetServerByDomain('*');
+				$oServer = \Aurora\Modules\Mail\Module::getInstance()->getServersManager()->GetServerByDomain('*');
 			}
 			if ($oServer)
 			{
@@ -180,7 +180,7 @@ class Module extends \Aurora\System\Module\AbstractModule
 
 					if ($bNeedToUpdatePasswordOrLogin)
 					{
-						\Aurora\System\Api::GetModule('Mail')->getAccountsManager()->updateAccount($oAccount);
+						\Aurora\Modules\Mail\Module::getInstance()->getAccountsManager()->updateAccount($oAccount);
 					}
 
 					$bResult =  true;
@@ -216,7 +216,7 @@ class Module extends \Aurora\System\Module\AbstractModule
 						{
 							$oAccount->UseToAuthorize = true;
 							$oAccount->UseThreading = $oServer->EnableThreading;
-							$bResult = \Aurora\System\Api::GetModule('Mail')->getAccountsManager()->updateAccount($oAccount);
+							$bResult = \Aurora\Modules\Mail\Module::getInstance()->getAccountsManager()->updateAccount($oAccount);
 						}
 						else
 						{
